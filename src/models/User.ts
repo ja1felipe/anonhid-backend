@@ -10,6 +10,7 @@ interface IUser extends Document {
   validated?: boolean
   generateToken: Function
   verificationToken?: string
+  likes?: [String]
 }
 
 const UserSchema = new Schema(
@@ -37,6 +38,11 @@ const UserSchema = new Schema(
     verificationToken: {
       type: String,
       select: false
+    },
+    likes: {
+      type: [String],
+      ref: 'Post',
+      default: []
     }
   },
   {

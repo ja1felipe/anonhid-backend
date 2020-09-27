@@ -13,18 +13,15 @@ function sendMail(body: IMailBody): void {
     from: config.mail.mail,
     to: body.to,
     subject: body.subject,
-    text: body.subject
+    text: body.text
   }
 
   const transporter = nodemailer.createTransport({
-    host: config.mail.host,
-    port: config.mail.port,
-    secure: false,
+    service: 'Gmail',
     auth: {
       user: config.mail.user,
       pass: config.mail.password
-    },
-    tls: { rejectUnauthorized: false }
+    }
   })
 
   transporter.sendMail(mailOptions, function (error, info) {

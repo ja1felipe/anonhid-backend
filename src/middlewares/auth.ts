@@ -21,6 +21,8 @@ export function auth(req: Request, res: Response, next: NextFunction) {
     expiresIn: '1h'
   })
 
+  res.locals.user = userId
+
   res.setHeader('token', newToken)
 
   next()

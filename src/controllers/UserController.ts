@@ -8,6 +8,12 @@ export default {
   async store(req: Request, res: Response) {
     const { email, password } = req.body
 
+    if (!/^.{8,}/.test(password)) {
+      return res
+        .status(406)
+        .send({ error: 'A senha deve conter no mínimo 8 caracteres' })
+    }
+
     try {
       const verificationToken = fromString(email)
 
@@ -25,13 +31,13 @@ export default {
         return res
           .status(500)
           .send({ error: 'Já existe um usuário cadastrado com esse e-mail' })
+      } else if (error.errors.email) {
+        return res.status(406).send({ error: 'E-mail inválido.' })
       } else {
-        return res
-          .status(500)
-          .send({
-            error:
-              'Erro interno do sistema, por favor verifique o corpo da requesição'
-          })
+        return res.status(500).send({
+          error:
+            'Erro interno do sistema, por favor verifique o corpo da requesição'
+        })
       }
     }
   }
