@@ -7,6 +7,12 @@ import uploadConfig from '../middlewares/upload'
 const router = Router()
 const upload = multer(uploadConfig)
 
-router.post('/create', [auth, upload.single('image')], Controler.store)
+router.get('/', Controler.getAll)
+router.post('/', [auth, upload.single('image')], Controler.store)
+router.put('/:postId', auth, Controler.update)
+router.delete('/:postId', auth, Controler.delete)
+router.get('/like/:postId', auth, Controler.updateLike)
+router.post('/commentary/:postId', auth, Controler.addComment)
+router.get('/user', auth, Controler.getByUser)
 
 export default router

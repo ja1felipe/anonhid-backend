@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
-import User from 'src/models/User'
+import User from '../models/User'
 import Post from '../models/Post'
-import mongoose from 'mongoose'
 
 export default {
   async store(req: Request, res: Response) {
@@ -58,6 +57,7 @@ export default {
         { owner: user, _id: postId },
         { description: description }
       )
+      post.description = description
       console.log(`Post atualizado com sucesso.`, post)
       return res.status(200).send({ message: 'success', post })
     } catch (error) {
@@ -84,32 +84,56 @@ export default {
         message: 'Erro ao adicionar comentário, por favor revise o request.'
       })
     }
-  }
+  },
 
-  //TODO
-  /* async updateLike(req: Request, res: Response) {
+  async updateLike(req: Request, res: Response) {
     const { postId } = req.params
-    const { like } = req.body
     const { user } = res.locals
 
     try {
       const user_document = await User.findById(user)
       const post = await Post.findOne({ _id: postId })
 
-      if (user_document.likes.includes(postId) && like) {
-        console.log(`Comentário adicionado com sucesso.`, post)
-        return res.status(200).send({ message: 'success', post })
+      let message: string
+
+      if (user_document.likes.includes(postId)) {
+        post.likes -= 1
+        let index = user_document.likes.indexOf(postId)
+        user_document.likes.splice(index, 1)
+        message = 'Deslike'
+      } else {
+        user_document.likes.push(postId)
+        post.likes += 1
+        message = 'Like'
       }
 
       user_document.save()
       post.save()
 
-      console.log(`Comentário adicionado com sucesso.`, post)
-      return res.status(200).send({ message: 'success', post })
+      console.log(`${message} adicionado com sucesso.`, post)
+      return res.status(200).send({ message, post })
     } catch (error) {
       return res.status(500).send({
-        message: 'Erro ao adicionar comentário, por favor revise o request.'
+        message: 'Erro ao adicionar deslike/like, por favor revise o request.'
       })
     }
-  } */
+  },
+
+  async delete(req: Request, res: Response) {
+    const { postId } = req.params
+    const { user } = res.locals
+
+    try {
+      const post = await Post.findOneAndDelete({ owner: user, _id: postId })
+
+      console.log(`Post deletado com sucesso.`, post)
+      return res
+        .status(200)
+        .send({ message: 'Post deletado com sucesso.', post })
+    } catch (error) {
+      return res.status(500).send({
+        message: 'Erro ao deletar post, por favor revise o request.'
+      })
+    }
+  }
 }

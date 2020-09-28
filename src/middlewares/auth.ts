@@ -11,7 +11,10 @@ export function auth(req: Request, res: Response, next: NextFunction) {
     jwtPayload = jwt.verify(token, config.tokenSecret)
     res.locals.jwtPayload = jwtPayload
   } catch (error) {
-    res.status(401).send()
+    res.status(401).send({
+      message:
+        'Requisição não autorizada, por favor passe o token do usuário no header "Authorization".'
+    })
     return
   }
 
