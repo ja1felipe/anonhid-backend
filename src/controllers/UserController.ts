@@ -11,7 +11,7 @@ export default {
     if (!/^.{8,}/.test(password)) {
       return res
         .status(406)
-        .send({ error: 'A senha deve conter no mínimo 8 caracteres' })
+        .send({ message: 'A senha deve conter no mínimo 8 caracteres' })
     }
 
     try {
@@ -30,12 +30,12 @@ export default {
       if (error.code == 11000) {
         return res
           .status(500)
-          .send({ error: 'Já existe um usuário cadastrado com esse e-mail' })
+          .send({ message: 'Já existe um usuário cadastrado com esse e-mail' })
       } else if (error.errors.email) {
-        return res.status(406).send({ error: 'E-mail inválido.' })
+        return res.status(406).send({ message: 'E-mail inválido.' })
       } else {
         return res.status(500).send({
-          error:
+          message:
             'Erro interno do sistema, por favor verifique o corpo da requesição'
         })
       }

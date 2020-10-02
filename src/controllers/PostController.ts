@@ -24,7 +24,15 @@ export default {
 
   async getAll(req: Request, res: Response) {
     try {
+      const { query, page, limit } = req.query
+      const skip = Number(limit) * (Number(page) - 1)
       const posts = await Post.find()
+        .sort({
+          [query === 'votes' ? 'likes' : 'createdAt']: -1
+        })
+        .skip(skip)
+        .limit(Number(limit))
+
       console.log('Retornando todos posts criados.', posts)
       return res.status(200).send({ message: 'success', posts })
     } catch (error) {
@@ -36,8 +44,12 @@ export default {
 
   async getByUser(req: Request, res: Response) {
     const { user } = res.locals
+    const { page, limit } = req.query
+    const skip = Number(limit) * (Number(page) - 1)
     try {
       const posts = await Post.find({ owner: user })
+        .skip(skip)
+        .limit(Number(limit))
       console.log(`Retornando todos posts do usuário ${user}.`, posts)
       return res.status(200).send({ message: 'success', posts })
     } catch (error) {
