@@ -1,5 +1,4 @@
 import * as nodemailer from 'nodemailer'
-import config from '../config/config'
 
 interface IMailBody {
   from?: string
@@ -10,7 +9,7 @@ interface IMailBody {
 
 function sendMail(body: IMailBody): void {
   const mailOptions: IMailBody = {
-    from: config.mail.user,
+    from: process.env.MAIL_USER,
     to: body.to,
     subject: body.subject,
     text: body.text
@@ -19,8 +18,8 @@ function sendMail(body: IMailBody): void {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: config.mail.user,
-      pass: config.mail.password
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD
     }
   })
 

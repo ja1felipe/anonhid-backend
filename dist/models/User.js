@@ -13,8 +13,6 @@ var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 
 var _validator = _interopRequireDefault(require("validator"));
 
-var _config = _interopRequireDefault(require("../config/config"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const UserSchema = new _mongoose.Schema({
@@ -57,7 +55,7 @@ UserSchema.methods.generateToken = function (expiresIn) {
   const token = _jsonwebtoken.default.sign({
     userId: user._id,
     email: user.email
-  }, _config.default.tokenSecret, {
+  }, process.env.JWT_SECRET, {
     expiresIn: expiresIn ? expiresIn : '24h'
   });
 

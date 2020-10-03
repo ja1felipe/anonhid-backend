@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import config from '../config/config'
 import User from '../models/User'
 import MailService from '../services/MailService'
 import { fromString } from 'uuidv4'
@@ -22,7 +21,7 @@ export default {
       MailService.sendMail({
         to: email,
         subject: 'Confirme seu cadastro',
-        text: `Olá, \n\nPor favor, confirme seu email pelo link: \n\n ${config.front_url}/validate/${verificationToken}`
+        text: `Olá, \n\nPor favor, confirme seu email pelo link: \n\n ${process.env.FRONT_URL}/validate/${verificationToken}`
       })
       console.log('Usuário ' + user.email + ' criado com sucesso.')
       return res.status(201).send({ user })

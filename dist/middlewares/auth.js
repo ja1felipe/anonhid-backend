@@ -7,8 +7,6 @@ exports.auth = auth;
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-var _config = _interopRequireDefault(require("../config/config"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function auth(req, res, next) {
@@ -16,7 +14,7 @@ function auth(req, res, next) {
   let jwtPayload;
 
   try {
-    jwtPayload = _jsonwebtoken.default.verify(token, _config.default.tokenSecret);
+    jwtPayload = _jsonwebtoken.default.verify(token, process.env.JWT_SECRET);
     res.locals.jwtPayload = jwtPayload;
   } catch (error) {
     res.status(401).send({
@@ -33,7 +31,7 @@ function auth(req, res, next) {
   const newToken = _jsonwebtoken.default.sign({
     userId,
     email
-  }, _config.default.tokenSecret, {
+  }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   });
 

@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _config = _interopRequireDefault(require("../config/config"));
-
 var _User = _interopRequireDefault(require("../models/User"));
 
 var _MailService = _interopRequireDefault(require("../services/MailService"));
@@ -39,7 +37,7 @@ var _default = {
       _MailService.default.sendMail({
         to: email,
         subject: 'Confirme seu cadastro',
-        text: `Olá, \n\nPor favor, confirme seu email pelo link: \n\n ${_config.default.front_url}/validate/${verificationToken}`
+        text: `Olá, \n\nPor favor, confirme seu email pelo link: \n\n ${process.env.FRONT_URL}/validate/${verificationToken}`
       });
 
       console.log('Usuário ' + user.email + ' criado com sucesso.');

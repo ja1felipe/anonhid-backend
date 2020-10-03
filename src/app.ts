@@ -3,11 +3,11 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import routes from './routes'
 import path from 'path'
-import config from './config/config'
+import dotenv from 'dotenv'
 const app = express()
-
+dotenv.config()
 mongoose
-  .connect(config.mongo_url, {
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true
   })
   .then(() => {

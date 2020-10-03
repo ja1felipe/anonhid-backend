@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
-import config from '../config/config'
 
 export function auth(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization
@@ -8,7 +7,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
   let jwtPayload
 
   try {
-    jwtPayload = jwt.verify(token, config.tokenSecret)
+    jwtPayload = jwt.verify(token, process.env.JWT_SECRET)
     res.locals.jwtPayload = jwtPayload
   } catch (error) {
     res.status(401).send({
@@ -20,7 +19,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 
   const { userId, email } = jwtPayload
 
-  const newToken = jwt.sign({ userId, email }, config.tokenSecret, {
+  const newToken = jwt.sign({ userId, email }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   })
 

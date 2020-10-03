@@ -2,7 +2,6 @@ import { Schema, model, Document } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import validator from 'validator'
-import config from '../config/config'
 
 interface IUser extends Document {
   email: string
@@ -54,7 +53,7 @@ UserSchema.methods.generateToken = function (expiresIn) {
   const user = this
   const token = jwt.sign(
     { userId: user._id, email: user.email },
-    config.tokenSecret,
+    process.env.JWT_SECRET,
     {
       expiresIn: expiresIn ? expiresIn : '24h'
     }
