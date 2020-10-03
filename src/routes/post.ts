@@ -9,7 +9,7 @@ const upload = multer(uploadConfig)
 
 router.get('/', Controler.getAll)
 router.post('/', [auth, upload.single('image')], Controler.store)
-router.put('/:postId', auth, Controler.update)
+router.put('/:postId', [auth, upload.single('image')], Controler.update)
 router.delete('/:postId', auth, Controler.delete)
 router.get('/like/:postId', auth, Controler.updateLike)
 router.post('/commentary/:postId', auth, Controler.addComment)

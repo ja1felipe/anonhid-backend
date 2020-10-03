@@ -60,16 +60,22 @@ export default {
   },
 
   async update(req: Request, res: Response) {
+    interface IUpdate {
+      image?: string
+      description?: string
+    }
+    const image = req.file ? req.file.filename : null
     const { description } = req.body
     const { postId } = req.params
     const { user } = res.locals
+    let update: IUpdate = {}
+
+    if (image) update.image = image
+    if (description) update.description = description
 
     try {
-      const post = await Post.findOneAndUpdate(
-        { owner: user, _id: postId },
-        { description: description }
-      )
-      post.description = description
+      let post = await Post.update({ owner: user, _id: postId }, update)
+      post = await Post.findById(postId)
       console.log(`Post atualizado com sucesso.`, post)
       return res.status(200).send({ message: 'success', post })
     } catch (error) {
