@@ -10,7 +10,7 @@ interface IMailBody {
 
 function sendMail(body: IMailBody): void {
   const mailOptions: IMailBody = {
-    from: config.mail.mail,
+    from: config.mail.user,
     to: body.to,
     subject: body.subject,
     text: body.text
